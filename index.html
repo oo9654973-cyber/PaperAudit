@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'" />
+  <meta name="description" content="PaperAudit：无需安装，浏览器本地检查 Word 论文的图表引用、参考文献、图片有效分辨率，并生成 HTML 报告。" />
+  <title>PaperAudit — 科研论文投稿前检查</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap header-row">
+      <a class="wordmark" href="./" aria-label="PaperAudit 首页"><span class="logo-mark">P<span>.</span></span> <span>PaperAudit</span><span class="version">BETA 0.4.1</span></a>
+      <nav aria-label="页面导航"><a href="#how">使用步骤</a><a href="#features">能检查什么</a><a href="#privacy">隐私说明</a></nav>
+      <span class="top-pill"><span class="pulse"></span> Local-first · 无需登录</span>
+    </div>
+  </header>
+  <main>
+    <section class="hero wrap">
+      <div class="hero-copy"><div class="eyebrow"><span class="tiny-diamond"></span>  RESEARCH TOOLS / 科研工具</div>
+        <h1>投稿之前，<br><em>先给论文做个体检。</em></h1>
+        <p class="hero-sub">拖入 <strong>Word 论文</strong>，快速检查图表编号、正文引用、数字型参考文献、图片有效分辨率；还可选传目标期刊模板对照页面与写作要求。检测在浏览器中完成，论文无需上传。</p>
+        <div class="hero-promises"><span>✓ 免安装</span><span>✓ 中文报告</span><span>✓ 文件不上传</span></div>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="fake-document"><div class="doc-top"><span>MANUSCRIPT / 01</span><span>● ● ●</span></div><div class="doc-title">Research manuscript</div><div class="ink w75"></div><div class="ink w95"></div><div class="ink w85"></div><div class="preview-chart"><svg viewBox="0 0 240 90" preserveAspectRatio="none"><path d="M0 68 L32 62 L53 45 L75 58 L98 31 L119 38 L139 15 L161 47 L182 29 L206 39 L240 12" fill="none" stroke="#486c8c" stroke-width="2.5"/><path d="M0 72 L32 67 L53 58 L75 52 L98 44 L119 46 L139 40 L161 50 L182 44 L206 43 L240 39" fill="none" stroke="#bd8c77" stroke-width="2" stroke-dasharray="4 4"/></svg></div><div class="ink w65"></div><div class="ink w80"></div></div><div class="float-note float-green">✓ 结构检查完成</div><div class="float-note float-orange">! 图 3 引用未匹配</div></div>
+    </section>
+    <section class="workspace-wrap" id="start"><div class="wrap">
+      <div class="workspace-heading"><div><div class="section-kicker">START HERE</div><h2>开始检查</h2><p>添加论文；可选上传期刊模板或查找官方模板入口。</p></div><div class="work-state">论文 → 模板（可选）→ 报告</div></div>
+      <div class="workspace-grid">
+        <section class="panel uploader-panel" aria-labelledby="upload-title">
+          <div class="panel-title"><span class="step">01</span><h3 id="upload-title">添加论文或图片</h3></div>
+          <div class="drop" id="drop-zone" role="button" tabindex="0" aria-label="选择或拖入 DOCX、PNG 或 JPEG 文件"><div class="upload-symbol">↥</div><strong>将文件拖到这里</strong><span>或 <button type="button" class="inline-button" id="choose-file">浏览文件</button></span><small>支持 DOCX · PNG · JPG/JPEG，单文件 ≤30 MB · 最多 10 个 · 总计 ≤80 MB</small></div>
+          <input type="file" id="file-input" multiple accept=".docx,.png,.jpg,.jpeg,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg" hidden />
+          <div id="file-list" class="file-list" aria-live="polite"><div class="file-placeholder">尚未选择文件。可以先试用下方的示例。</div></div>
+          <button class="sample-button" id="load-sample" type="button">↗ 使用示例论文体验</button>
+          <p class="hint">提示：Word 旧格式 .doc 暂不支持；请在 Word 中另存为 .docx。</p>
+        </section>
+        <section class="panel config-panel" aria-labelledby="rules-title">
+          <div class="panel-title"><span class="step">02</span><h3 id="rules-title">检查规则</h3></div>
+          <label class="rule-row"><span><b>图表编号与正文引用</b><small>检查缺号、重复编号、未匹配引用</small></span><input type="checkbox" id="check-captions" checked /></label>
+          <label class="rule-row"><span><b>参考文献数字编号</b><small>支持 [1]、[1, 3]、[1–4] 等基本形式</small></span><input type="checkbox" id="check-citations" checked /></label>
+          <label class="rule-row"><span><b>Word 内嵌图片有效分辨率</b><small>使用文档记录的实际显示宽度计算</small></span><input type="checkbox" id="check-images" checked /></label>
+          <div class="control-row"><label for="ppi">最低有效分辨率（自定义规则）</label><div class="control"><input type="number" id="ppi" min="50" max="1200" value="300" step="50"/><span>PPI</span></div></div>
+          <p class="fine-print">300 PPI 只是常用示例阈值，不代表所有期刊统一要求。请以目标期刊的正式图稿规定为准。</p>
+          <button class="primary-btn" type="button" id="run-audit" disabled>开始检查 <span>↗</span></button>
+          <div id="status" role="status" aria-live="polite" class="status">等待添加文件</div>
+        </section>
+      </div>
+      <section class="panel template-panel" id="template-check" aria-labelledby="template-heading">
+        <div class="panel-title"><span class="step">+</span><h3 id="template-heading">可选：上传目标期刊模板或作者指南</h3><span class="template-feature-tag">模板对照</span></div>
+        <p class="template-desc">已有期刊模板？选择 <b>DOCX / DOTX</b>，自动对照纸张、页边距、默认字号与可识别的结构。也可以粘贴官方指南到 TXT / MD 后上传，软件将摘录明显的写作要求，提示逐项人工核对。</p>
+        <div class="template-choose-row"><button type="button" class="secondary-btn" id="choose-template">选择模板 / 指南文件</button><span id="template-info" class="muted">未选择模板：仍可使用下方的官方投稿资源目录</span><button type="button" class="inline-button" id="remove-template" hidden>移除模板</button></div>
+        <input type="file" id="template-input" accept=".docx,.dotx,.txt,.md" hidden />
+        <div class="template-boundary">注意：用户上传的模板不等于已核实的期刊规范；上传用于检查不会自动公开，也不会自动保存到模板库。只有主动点击“保存到我的模板库”才会保存在此浏览器。</div>
+      </section>
+      <section class="panel community-panel" id="community-library" aria-labelledby="community-heading">
+        <div class="panel-title"><span class="step">04</span><h3 id="community-heading">我的模板库 · 社区共享</h3><span class="template-feature-tag">模板共享</span></div>
+        <p class="template-desc"><strong>先收藏自己的模板，再决定是否贡献。</strong> 本地收藏使用浏览器 IndexedDB，不需要账号；论文文件不会被存入模板库。公共投稿必须明确操作，仅提交来源信息，不会自动上传模板原件。</p>
+        <div class="community-form">
+          <label>期刊 / 会议名称 <span class="required">*</span><input id="share-journal" type="text" maxlength="140" placeholder="例如：Journal of Example Research" autocomplete="off"></label>
+          <label>研究方向 <select id="share-discipline"><option value="electrical">电气工程 / 能源</option><option value="optics">光学 / 光电子</option><option value="physics">物理 / 材料</option><option value="computer">计算机 / 工程</option><option value="medicine">医学 / 生命科学</option><option value="general">综合 / 其他</option></select></label>
+          <label>语言 <select id="share-language"><option value="zh">中文</option><option value="en">英文</option></select></label>
+          <label>模板版本 / 年份（可选）<input id="share-version" maxlength="80" placeholder="例如：2026 / Initial submission"></label>
+          <label class="wide">官方或获授权的来源链接（公开投稿必填）<input id="share-source" type="url" maxlength="1500" placeholder="https://期刊官网/..." spellcheck="false"></label>
+        </div>
+        <div class="community-actions"><button type="button" class="secondary-btn" id="save-local-template" disabled>保存当前模板到我的模板库</button><span class="muted" id="library-status" role="status" aria-live="polite">尚无本地收藏操作</span></div>
+        <div id="library-list" class="library-list" aria-live="polite"><p class="muted">正在加载本地模板库……</p></div>
+        <details class="submission-details" id="submission-details"><summary>向公共模板库贡献期刊模板 / 作者指南 ↗</summary>
+          <p class="template-desc">公开模板库采用<strong>投稿 → 管理员核验 → 收录</strong>。默认只提供官方来源链接，不自动公开上传的二进制文件；没有清晰转载许可的原文件不得直接作为公开模板分发。</p>
+          <div class="community-form"><label>分享方式 <select id="share-rights"><option value="source-link">仅分享官方来源链接（推荐）</option><option value="permission">有明确的模板再分发许可（需提供依据）</option></select></label><label>授权依据（仅选择再分发时必填）<input id="share-permission" maxlength="400" placeholder="许可证名称与授权网址"></label><label class="wide">补充说明（可选）<textarea id="share-note" maxlength="700" rows="2" placeholder="适用稿件类型、投稿阶段、已知有效年份……"></textarea></label></div>
+          <label class="privacy-consent"><input type="checkbox" id="share-confirm">我确认没有提交未发表论文、私人信息或无权公开的内容；理解投稿不等于审核通过。</label>
+          <div class="community-actions"><button type="button" class="secondary-btn" id="submit-metadata">生成投稿信息 JSON</button><button type="button" class="secondary-btn" id="open-submission">打开 GitHub 投稿页面</button><span class="muted" id="submission-status" role="status" aria-live="polite">未连接公共 GitHub 仓库；可先生成投稿 JSON，待上线后提交</span></div>
+        </details>
+      </section>
+      <section class="results" id="results" hidden aria-labelledby="result-heading">
+        <div class="results-top"><div><div class="section-kicker">AUDIT RESULTS</div><h2 id="result-heading">检查报告 <span id="report-file" class="muted"></span></h2></div><div class="result-actions"><button class="secondary-btn" id="save-html" type="button">下载 HTML 报告</button><button class="secondary-btn" id="save-json" type="button">下载 JSON</button></div></div>
+        <div class="stat-grid"><div><strong id="count-total">0</strong><span>检查发现</span></div><div><strong id="count-warning">0</strong><span>需要关注</span></div><div><strong id="count-unverified">0</strong><span>无法自动验证</span></div><div><strong id="count-images">0</strong><span>已解析图片</span></div></div>
+        <div class="report-filter" role="group" aria-label="筛选报告"><button type="button" class="filter active" data-filter="all">全部</button><button type="button" class="filter" data-filter="warning">需关注</button><button type="button" class="filter" data-filter="unverified">待人工确认</button></div>
+        <div id="findings" class="findings"></div>
+        <div id="coverage" class="coverage"></div>
+      </section>
+    </div></section>
+    <section class="catalog wrap" id="journals" aria-labelledby="journal-heading">
+      <div class="catalog-heading"><div><div class="section-kicker">JOURNAL RESOURCES</div><h2 id="journal-heading">没有模板？从官方入口找。</h2><p>选择研究方向和语言，打开期刊或出版机构的正式投稿页面。不同期刊不一定提供 Word 模板，务必核对最新作者指南。</p></div><span class="catalog-source">人工核验的官方入口 · 2026-10</span></div>
+      <div class="catalog-controls"><label>研究方向 <select id="discipline"><option value="all">全部研究方向</option><option value="electrical">电气工程 / 能源</option><option value="optics">光学 / 光电子</option><option value="physics">物理 / 材料</option><option value="computer">计算机 / 工程</option><option value="medicine">医学 / 生命科学</option><option value="general">跨学科 / 综合</option></select></label><label>语言 <select id="journal-language"><option value="all">中英文</option><option value="zh">中文期刊</option><option value="en">英文期刊 / 出版机构</option></select></label></div>
+      <div id="journal-results" class="catalog-results" aria-live="polite"></div>
+      <p class="fine-print">目录包含维护者整理的官方入口，以及<strong>经过人工审核才可显示的社区投稿链接</strong>。社区投稿在审核前不会公开；链接不是已下载的模板，收录后仍需核对官网最新规定。</p>
+    </section>
+    <section class="details wrap" id="features"><div class="section-kicker">WHY PAPERAUDIT</div><h2>把容易遗漏的问题，<br>在投稿前找出来。</h2><div class="feature-grid"><article><div class="feature-icon">01</div><h3>正文一致性</h3><p>交叉检查文中“如图 4 所示”与实际图题是否对应，定位到段落序号和文本片段。</p></article><article><div class="feature-icon">02</div><h3>图片技术质量</h3><p>读取 DOCX 内嵌 PNG/JPEG 像素尺寸与显示尺寸，计算有效 PPI，不凭文件 DPI 元数据猜测。</p></article><article><div class="feature-icon">03</div><h3>可带走的报告</h3><p>下载自包含 HTML 与 JSON，方便逐项处理、备份和提交 Issue 时复现问题。</p></article></div></section>
+    <section class="how wrap" id="how"><div><div class="section-kicker">HOW IT WORKS</div><h2>不需要学习新软件。</h2></div><div class="how-items"><div><b>1</b><span>选择你的 <code>.docx</code> 论文或图片</span></div><div><b>2</b><span>选择最低 PPI 和检查项目</span></div><div><b>3</b><span>查看问题并下载离线 HTML 报告</span></div></div></section>
+    <section class="privacy wrap" id="privacy"><div class="privacy-icon">◎</div><div><h2>你的论文，只留在你的设备里。</h2><p>本版使用纯静态网页，文件由浏览器本地解析。没有自动上传接口、账号系统或远程 AI 调用。只有用户明确点击“保存到我的模板库”时，模板才存放于当前浏览器的本地数据库；仅用户主动生成投稿信息或前往 GitHub 才开始社区贡献流程，且默认只分享来源链接。浏览器清理网站数据可能删除本地模板。</p></div></section>
+  </main>
+  <footer class="footer"><div class="wrap footer-row"><span><strong>PaperAudit</strong> · Open source research tooling</span><span>Beta v0.4.1 · Built for researchers</span></div></footer>
+  <script src="vendor/jszip.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body></html>
