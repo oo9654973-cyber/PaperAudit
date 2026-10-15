@@ -1,0 +1,72 @@
+name: Journal template / author-guide contribution
+description: Suggest an official journal template or author guide for human review
+title: "[Template submission] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share **official links or explicitly authorized sources only**. Do not attach a private manuscript or unlicensed journal template. Contributions are reviewed manually before appearing in PaperAudit.
+  - type: input
+    id: journal
+    attributes:
+      label: Journal or conference name
+      placeholder: Journal of Example Research
+    validations:
+      required: true
+  - type: dropdown
+    id: discipline
+    attributes:
+      label: Discipline
+      options:
+        - Electrical engineering and energy
+        - Optics and photonics
+        - Physics and materials
+        - Computer science
+        - Medicine and life sciences
+        - General / other
+    validations:
+      required: true
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      options:
+        - Chinese
+        - English
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Template or author-guide version/year
+      description: Include submission stage if known
+  - type: input
+    id: source
+    attributes:
+      label: Official or authorized HTTPS source URL
+      placeholder: https://publisher.example.org/author-guide
+    validations:
+      required: true
+  - type: dropdown
+    id: rights
+    attributes:
+      label: Sharing rights
+      options:
+        - Official link only (no file redistribution)
+        - Explicit redistribution permission is available
+    validations:
+      required: true
+  - type: textarea
+    id: permission
+    attributes:
+      label: Permission basis or notes
+      description: Required in practice for any file-hosting request; default is official link only
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Confirmation
+      options:
+        - label: I confirm this is not a private manuscript or confidential document, and that I have the right to share the source link.
+          required: true
+        - label: I understand submissions are reviewed manually and are not automatically added to the public catalog.
+          required: true

@@ -1,0 +1,13 @@
+name: Feature request
+description: Suggest an improvement for PaperAudit
+body:
+  - type: textarea
+    id: motivation
+    attributes:
+      label: What problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution (optional)

@@ -1,0 +1,21 @@
+name: Bug report
+description: Report a reproducible error without uploading private manuscripts
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Please remove any private paper content
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Prefer synthetic public test files
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
